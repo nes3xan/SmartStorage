@@ -1,22 +1,6 @@
 #pragma once
 
-// =============================================================================
-//  appstyle.h — Централізоване сховище стилів SMARTSTORAGE
-//
-//  Містить:
-//    • Кольорові константи (простір імен AppStyle::Color)
-//    • Розмірні константи (AppStyle::Size)
-//    • Типографіку        (AppStyle::Font)
-//    • Глобальний QSS     (AppStyle::globalStyleSheet())
-//    • Утилітарні функції (AppStyle::setupApplication)
-//
-//  Використання:
-//    #include "appstyle.h"
-//    ...
-//    QApplication::setStyle(QStyleFactory::create("Fusion"));
-//    qApp->setStyleSheet(AppStyle::globalStyleSheet());
-//    AppStyle::setupFont(app);
-// =============================================================================
+
 
 #include <QString>
 #include <QApplication>
@@ -26,114 +10,98 @@
 namespace AppStyle
 {
 
-// ═════════════════════════════════════════════════════════════════════════════
-//  КОЛЬОРИ
-//  Джерело: pixel-аналіз макетів Figma (скріншоти 1–6)
-// ═════════════════════════════════════════════════════════════════════════════
+
 namespace Color
 {
-    // ── Ієрархія фонів (від найтемнішого до найсвітлішого) ──────────────────
-    // Зовнішній фон вікна / контентна зона між панелями
+    
     inline constexpr const char* BG_APP         = "#0F1523";
-    // Ліва навігаційна панель та верхня смуга
+
     inline constexpr const char* BG_SIDEBAR     = "#131B30";
-    // Картки, панелі («Останні дії», статкартки, таблиці)
+
     inline constexpr const char* BG_PANEL       = "#182032";
-    // Поля вводу, комбобокси
+
     inline constexpr const char* BG_INPUT       = "#1C2840";
-    // Чергові рядки таблиці (alternating rows)
+
     inline constexpr const char* BG_ROW_ALT     = "#1A2B44";
-    // Комірки схеми складу — невибрані
+  
     inline constexpr const char* BG_CELL        = "#1E3259";
-    // Заставка (splash) — контейнер
+   
     inline constexpr const char* BG_SPLASH_CARD = "#131B30";
 
-    // ── Акценти ──────────────────────────────────────────────────────────────
-    // Синій — активні елементи, первинні кнопки, вибрана nav-кнопка
+ 
     inline constexpr const char* ACCENT_BLUE    = "#2563EB";
-    // Синій hover / натиснення
+
     inline constexpr const char* ACCENT_HOVER   = "#1D4ED8";
-    // Блакитний — посилання, другорядні акценти
+   
     inline constexpr const char* ACCENT_LINK    = "#3B82F6";
-    // Помаранчевий — попередження («Низький запас»)
+
     inline constexpr const char* ACCENT_ORANGE  = "#F59E0B";
 
-    // ── Статуси товарів ───────────────────────────────────────────────────────
-    inline constexpr const char* STATUS_OK      = "#22C55E";   // В наявності
-    inline constexpr const char* STATUS_WARN    = "#F59E0B";   // Низький запас
-    inline constexpr const char* STATUS_ERR     = "#EF4444";   // Відсутній
 
-    // ── Текст ─────────────────────────────────────────────────────────────────
-    // Основний текст, значення
+    inline constexpr const char* STATUS_OK      = "#22C55E";  
+    inline constexpr const char* STATUS_WARN    = "#F59E0B";   
+    inline constexpr const char* STATUS_ERR     = "#EF4444";   
+
+
     inline constexpr const char* TEXT_PRIMARY   = "#E4E8F0";
-    // Другорядний текст, підписи, заголовки таблиць
+    
     inline constexpr const char* TEXT_DIM       = "#7B8EA8";
-    // Чисто-білий (великі числа, активні кнопки)
+  
     inline constexpr const char* TEXT_WHITE     = "#FFFFFF";
 
-    // ── Межі ──────────────────────────────────────────────────────────────────
-    // Субтильна межа карток і панелей
+
     inline constexpr const char* BORDER_PANEL   = "#1E2F4E";
-    // Межа полів введення
+    
     inline constexpr const char* BORDER_INPUT   = "#2A3D60";
-    // Межа в стані фокусу / hover
+   
     inline constexpr const char* BORDER_FOCUS   = "#2563EB";
 
-    // ── Схема складу ──────────────────────────────────────────────────────────
-    // Комірка — невибрана
+   
     inline constexpr const char* CELL_DEFAULT   = "#1E3259";
-    // Комірка — hover
+ 
     inline constexpr const char* CELL_HOVER     = "#263D72";
-    // Комірка — вибрана (виділена синім)
+  
     inline constexpr const char* CELL_SELECTED  = "#2563EB";
 
-} // namespace Color
+} 
 
 
-// ═════════════════════════════════════════════════════════════════════════════
-//  РОЗМІРИ
-// ═════════════════════════════════════════════════════════════════════════════
+
 namespace Size
 {
-    inline constexpr int SIDEBAR_WIDTH      = 200;  // px — ширина лівої панелі
-    inline constexpr int TOPBAR_HEIGHT      =  56;  // px — висота верхньої смуги
-    inline constexpr int NAV_BTN_HEIGHT     =  42;  // px — висота nav-кнопки
-    inline constexpr int NAV_BTN_RADIUS     =   8;  // px — скруглення nav-кнопки
-    inline constexpr int CARD_RADIUS        =  10;  // px — скруглення карток
-    inline constexpr int INPUT_RADIUS       =   6;  // px — скруглення полів вводу
-    inline constexpr int BTN_RADIUS         =   6;  // px — скруглення кнопок
-    inline constexpr int WIN_BTN_SIZE       =  28;  // px — розмір кнопок вікна
-    inline constexpr int STAT_CARD_MIN_W    = 170;  // px — мін. ширина стат-картки
-    inline constexpr int TABLE_ROW_HEIGHT   =  40;  // px — висота рядка таблиці
-    inline constexpr int WAREHOUSE_CELL_MIN = 110;  // px — мін. розмір комірки складу
-    inline constexpr int SPLASH_W           = 640;  // px — ширина splash-вікна
-    inline constexpr int SPLASH_H           = 420;  // px — висота splash-вікна
+    inline constexpr int SIDEBAR_WIDTH      = 200;  
+    inline constexpr int TOPBAR_HEIGHT      =  56;  
+    inline constexpr int NAV_BTN_HEIGHT     =  42; 
+    inline constexpr int NAV_BTN_RADIUS     =   8; 
+    inline constexpr int CARD_RADIUS        =  10; 
+    inline constexpr int INPUT_RADIUS       =   6;  
+    inline constexpr int BTN_RADIUS         =   6;  
+    inline constexpr int WIN_BTN_SIZE       =  28;  
+    inline constexpr int STAT_CARD_MIN_W    = 170;  
+    inline constexpr int TABLE_ROW_HEIGHT   =  40;  
+    inline constexpr int WAREHOUSE_CELL_MIN = 110;  
+    inline constexpr int SPLASH_W           = 640;  
+    inline constexpr int SPLASH_H           = 420;  
 
-} // namespace Size
+} 
 
 
-// ═════════════════════════════════════════════════════════════════════════════
-//  ТИПОГРАФІКА
-// ═════════════════════════════════════════════════════════════════════════════
+
 namespace Font
 {
-    inline constexpr int XS     = 11;   // Дуже маленький (версія, підписи)
-    inline constexpr int SM     = 12;   // Маленький (заголовки таблиць, одиниці)
-    inline constexpr int BASE   = 13;   // Базовий (основний текст інтерфейсу)
-    inline constexpr int MD     = 15;   // Середній (заголовки секцій)
-    inline constexpr int LG     = 18;   // Великий (назва сторінки)
-    inline constexpr int STAT   = 28;   // Числа у стат-картках
-    inline constexpr int SPLASH_TITLE = 26; // «SMARTSTORAGE» у заставці
-    inline constexpr int CELL   = 16;   // Мітки комірок складу
+    inline constexpr int XS     = 11;   
+    inline constexpr int SM     = 12;   
+    inline constexpr int BASE   = 13;   
+    inline constexpr int MD     = 15;   
+    inline constexpr int LG     = 18;   
+    inline constexpr int STAT   = 28;   
+    inline constexpr int SPLASH_TITLE = 26; 
+    inline constexpr int CELL   = 16;   
 
-} // namespace Font
+} 
 
 
-// ═════════════════════════════════════════════════════════════════════════════
-//  ГЛОБАЛЬНА QSS-ТАБЛИЦЯ СТИЛІВ
-//  Охоплює: базовий QWidget, sidebar, topbar, картки, таблиці, кнопки,
-//           комбобокс, скролбар, прогресбар, комірки складу.
-// ═════════════════════════════════════════════════════════════════════════════
+
 inline QString globalStyleSheet()
 {
     return QStringLiteral(R"(
